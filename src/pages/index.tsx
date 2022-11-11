@@ -6,7 +6,14 @@ import client from "../../apollo-client";
 import Banner from '../components/BannerHome'
 import { DisplayCourses } from '../components/DisplayCourses'
 
-export default function Home() {
+import { CoursesType } from '../types/courses.type';
+import Header from '../components/Header';
+
+interface HomeProps {
+  courses: CoursesType[]
+}
+
+export default function Home({ courses }: HomeProps) {
   return (
     <div>
       <Head>
@@ -15,9 +22,13 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
+      <Header />
+
       <main>
         <Banner />
-        <DisplayCourses />
+        <DisplayCourses
+          courses={courses}
+        />
       </main>
     </div>
   )
@@ -28,22 +39,33 @@ export const getStaticProps: GetStaticProps = async () => {
     query: gql`
       query Courses {
         courses {
-          createdAt
           id
           publishedAt
           slug
           title
+          teachers {
+            id
+            name
+            picture {
+              url
+            }
+          }
+          assets {
+            id
+            url
+          }
           updatedAt
+          createdAt
         }
       }
     `,
   });
 
-  console.log(data)
+  const courses = data.courses;
 
   return {
     props: {
-      data
+      courses
     },
   } 
 }

@@ -1,7 +1,12 @@
 import { Stack } from "@chakra-ui/react";
+import { CoursesType } from "../types/courses.type";
 import CourseCard from "./CourseCard";
 
-export function DisplayCourses() {
+interface DisplayCoursesProps {
+  courses: CoursesType[]
+}
+
+export function DisplayCourses({ courses }: DisplayCoursesProps) {
   return (
     <Stack 
       flexDirection={'row'} 
@@ -10,9 +15,14 @@ export function DisplayCourses() {
       px={12}
       flexWrap='wrap'
     >
-      {/* <CourseCard />
-      <CourseCard />
-      <CourseCard /> */}
+      {courses.map(item => (
+        <CourseCard 
+          key={item.id}
+          image={item.assets[1].url}
+          title={item.title}
+          slug={item.slug}
+        />
+      ))}
     </Stack>
   )
 }
